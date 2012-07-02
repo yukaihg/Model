@@ -1,36 +1,20 @@
-var http = require('http');
+var es = require('com.izaakschroeder.elasticsearch'),
+	db = es.connect('localhost');
+	index = db.index('big-data/magic-cards');	//we will use presenter/questions
 
 var Question = function(){
-	this.status = 'unanswered';
-	this.options = {
-		host: 'localhost',
-		port: '9200',
-		path: '/_search',
-		method: 'POST',
-		headers:{'Content-Type':'application/json'}
-	}
 }
 
-Question.prototype.add = function(JSON, callback){
+//create a new question
+Question.prototype.put = function(JSON, callback){
 
 }
 
-Question.prototype.post = function(uid, callback){
-	var request = http.request(this.options, function(response){
-		var buffer="";
+//search based on uid
+Question.prototype.get = function(uid, callback){
 
-		response.on('data', function(data){
-			buffer+=data;
-		});
-
-		response.on('end', function(){
-			console.log(buffer);
-		});
-	});
-
-	request.on('error', function(err){});
-
-	request.write(JSON.stringify({
+	//need a query builder
+	var data = {
 		query: {
 			match_all: { }
 		},
@@ -38,14 +22,19 @@ Question.prototype.post = function(uid, callback){
 		size: 20,
 		sort: [  ],
 		facets: { }
-	}));
+	};
 
-	request.end();
+	index.search(data, function(err, data){console.log(data)});
 }
 
-Question.prototype.comment = function(uid, callback){
+//update a uid
+Question.prototype.post = function(uid, callback){
 
 }
 
+//delete a uid
+Question.portotype.delete = function(uid, callback){
+
+}
 
 module.exports = new Question;
