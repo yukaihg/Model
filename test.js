@@ -1,6 +1,8 @@
 //TODO: QUERY BUILDER
 
-var question = require('./Question.js');
+var questionES = require('./QuestionES.js'),
+	Question = require('./Question.js');
+
 
 //*****************SEARCH***********************
 //some search query for example
@@ -14,7 +16,7 @@ var searchData = {
 	facets: { }
 };
 
-question.get(searchData, function(){});
+questionES.get(searchData, function(){});
 
 //*****************INSERT***********************
 var insertData = {
@@ -23,10 +25,10 @@ var insertData = {
 };
 
 //inserting into es
-question.put(insertData, function(){});
+questionES.put(insertData, function(){});
 
 
 //*****************DELETE***********************
 
 //deleting this uid
-question.delete(insertData._id);
+questionES.delete(insertData._id);
