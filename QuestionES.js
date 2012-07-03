@@ -1,7 +1,7 @@
 var es = require('com.izaakschroeder.elasticsearch'),
 	db = es.connect('localhost'),
-	index = db.index('big-data'),	//we will use presenter
-	mapping = index.mapping('songs');	//use questions
+	index = db.index('presenter'),	//maybe read from config file
+	mapping = index.mapping('questions');
 
 var QuestionES = function(){
 }
@@ -19,20 +19,51 @@ QuestionES.prototype.put = function(data, callback){
 	}
 
 	document.set(data._source, function(result){
-		console.log(result);
+		if(result){
+			console.log('ES generated ID is: ' + result);
+		}
+
+		console.log('Document added');
 	});
 }
 
 //search based on query
 QuestionES.prototype.get = function(data, callback){
 	mapping.search(data, function(err, data){
-		console.log('total found: ' + data.hits.total);
+		if(data){
+			console.log(JSON.stringify(data.hits.hits));
+		}
+		else{
+			console.log("Nothing found");
+		}
 	});
 }
 
-//what is there to update lol?
-QuestionES.prototype.post = function(uid, callback){
+//get all comments based on questionID
+QuestionES.prototype.getComment = function(uid, callback){
+	var link = '/presenter/questions/' + uid;
+	db.get(link, {}, function(err, req, data){console.log(data._source.commentIDs)});
+}
 
+//add a comment uid to a question's comment id list
+QuestionES.prototype.postComment = function(uid, commentID, callback){
+	//damit no post method based on mapping
+
+	//TODO: UPDATE status as well if this is the first comment made
+
+	var data = {
+		'script':'ctx._source.commentIDs += commentIDs',
+		'params':{
+			'commentIDs':commentID
+		}
+	}
+
+	var link = '/presenter/questions/' + uid +'/_update';
+
+	//add new comment to the document found at uid
+	db.post(link, data, function(){
+		console.log("Comment posted");
+	})
 }
 
 //delete a uid
@@ -43,10 +74,5 @@ QuestionES.prototype.delete = function(uid, callback){
 	});
 }
 
-QuestionES.prototype.test = function(question){
-	console.log(question.user);
-}
-
-//how to get commentID
 
 module.exports = new QuestionES;
