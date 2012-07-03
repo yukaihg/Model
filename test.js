@@ -12,7 +12,12 @@ var insertData = {
 };
 
 //params: string object, callback function
-questionES.put(insertData, function(){});
+questionES.put(insertData, function(){});		//see NOTE below
+
+/*	NOTE: if you remove the _id property from insertData object, the function:
+ *			- questionES.put(insertData, function(){});
+ *			,will return an ES generated UID
+ */
 
 //*****************DELETE***********************
 
