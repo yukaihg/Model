@@ -1,54 +1,56 @@
 var questionES = require('./QuestionES.js');
 
 //*****************INSERT***********************
-var insertData = {
-	'_id':'someID',
-	'_source': {
-		'user':'bob',
-		'body':'Why so serious?',
-		'category':'misc',
-		'commentIDs':['aDdwjjd000']
-	}
+
+//assume this is the json data from the client
+var sampleData = {
+	'user':'bob',
+	'body':'Why so serious?',
+	'category':'misc',
+	'commentIDs':[],
+	'status':'unanswered'
 };
 
 //params: string object, callback function
-questionES.put(insertData, function(){});		//see NOTE below
+/*
+questionES.put(sampleData, function(result){
+	console.log('ES generated ID is: ' + JSON.stringify(result._id));
+});
+*/
 
-/*	NOTE: if you remove the _id property from insertData object, the function:
- *			- questionES.put(insertData, function(){});
- *			,will return an ES generated UID
- */
+//*****************GET question data by ID********************
+//params: comment uid, callback function
 
-//*****************DELETE***********************
-
-//params: question uid
-questionES.delete(insertData._id);
+//FOR EXAMPLE IF the question ID is: m119sa8YQxuOSKdhQ86SqA
+/*
+questionES.getQuestion('m119sa8YQxuOSKdhQ86SqA', function(data){
+	console.log("Question data: " + JSON.stringify(data));
+});
+*/
 
 //*****************ADD COMMENT ID********************
 
 //params: question uid, comment uid, callback function
-questionES.postComment('someID', 'oooadjd000',function(){});
-
-
-//*****************GET ALL COMMENT ID********************
-
-//params: comment uid, callback function
-questionES.getComment('someID', function(){});
-
+/*
+questionES.postComment('m119sa8YQxuOSKdhQ86SqA', 'eeewadsdddddddddd', function(){
+	console.log("Sample comment ID posted");
+});
+*/
 
 //*****************SEARCH***********************
 //some search query for example
-
-//TODO: QUERY BUILDER
-var searchData = {
-	query: {
-		match_all: { }
-	},
-	from: 0,
-	size: 20,
-	sort: [  ],
-	facets: { }
-};
-
+/*
 //params: string query, callback function
-questionES.get(searchData, function(){});
+questionES.get('buy Math 101', function(data){
+	console.log('Number of documents found: '+ JSON.stringify(data.hits.total));
+});
+*/
+
+//*****************DELETE***********************
+
+//params: question uid, callback function
+/*
+ questionES.delete('m119sa8YQxuOSKdhQ86SqA', function(){
+ console.log('Question removed');
+ });
+*/
