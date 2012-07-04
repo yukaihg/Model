@@ -1,56 +1,72 @@
-var questionES = require('./QuestionES.js');
+//TODO: map result to Question model
 
-//*****************INSERT***********************
+var queryES = require('./queryES.js');
+var question = require('./models/question.js');
 
-//assume this is the json data from the client
-var sampleData = {
-	'user':'bob',
-	'body':'Why so serious?',
-	'category':'misc',
-	'commentIDs':[],
-	'status':'unanswered'
-};
+//NOTE**
+//for types, 0 = presenter, 1 = accent
 
-//params: string object, callback function
+//*****************GET a question***********************
+//@params: questionID, type, callback
 /*
-questionES.put(sampleData, function(result){
-	console.log('ES generated ID is: ' + JSON.stringify(result._id));
+queryES.getQuestion('pJfznhheQuOicWWAjx7F00', 0, function(result){
+	console.log(result);
 });
 */
 
-//*****************GET question data by ID********************
-//params: comment uid, callback function
-
-//FOR EXAMPLE IF the question ID is: m119sa8YQxuOSKdhQ86SqA
+//*****************GET all question by user uuid********
 /*
-questionES.getQuestion('m119sa8YQxuOSKdhQ86SqA', function(data){
-	console.log("Question data: " + JSON.stringify(data));
+NOTE:
+For testing purposes we are using username INSTEAD of user uuid,
+so that results are meaningful
+*/
+
+//@params: userID, type, callback
+/*
+queryES.getAllQuestionByUserID('jbo1', 0, function(result){
+	//You should get 2 sets of result
+	console.log('Found: ' + result.total);
+	console.log(JSON.stringify(result.hits));
+
+
+})
+*/
+
+//*****************SEARCH all based on project type*****
+var searchString = 'exercise benefit';
+
+//@params: search string, type, callback
+/*
+queryES.searchAll(searchString, 0, function(result){
+	console.log('Found: ' + result.total);
+	console.log(JSON.stringify(result.hits));
+})
+*/
+
+
+//*****************ADD a question***********************
+//Question model takes in (questionID, userID, questionBody, category)
+var question = new question('someuidlololol', 'someUserUUID', 'This is the question i asked', 'life');
+
+//@params: question model, type, callback
+/*
+queryES.addQuestion(question, 0, function(){
+	console.log("Question added, check ES");
 });
 */
 
-//*****************ADD COMMENT ID********************
-
-//params: question uid, comment uid, callback function
+//*****************UPDATE a question**********************
+//@params: questionID, questionBody, type, callback
 /*
-questionES.postComment('m119sa8YQxuOSKdhQ86SqA', 'eeewadsdddddddddd', function(){
-	console.log("Sample comment ID posted");
+queryES.updateQuestion('someuidlololol', 'This is my new question', 0, function(){
+	console.log("Question updated, check ES");
 });
 */
 
-//*****************SEARCH***********************
-//some search query for example
+//*****************DELETE a question***********************
+//@params: questionID, questionBody, type, callback
 /*
-//params: string query, callback function
-questionES.get('buy Math 101', function(data){
-	console.log('Number of documents found: '+ JSON.stringify(data.hits.total));
-});
-*/
-
-//*****************DELETE***********************
-
-//params: question uid, callback function
-/*
- questionES.delete('m119sa8YQxuOSKdhQ86SqA', function(){
- console.log('Question removed');
- });
+queryES.deleteQuestion('someuidlololol', 0, function(){
+	console.log("Question deleted");
+})
 */
