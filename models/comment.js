@@ -16,7 +16,9 @@ var Comment = function(uuid, user, body){
 	this.upvote = 0;
 	this.downvote = 0;
 	this.body = body;	
+	this.questionID = '';
 	this.timestamp	= '2012-07-01';
+	this.isAnswered = 'false';
 }
 
 module.exports = Comment;

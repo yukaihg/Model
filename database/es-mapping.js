@@ -34,6 +34,13 @@ var map = function(){
 					},
 					"isAnswered": {
 						"type": "string"
+					},
+					"title": {
+						"type": "string"
+					},
+					"timestamp": {
+						"type": "date",
+						"format":"dateOptionalTime"
 					}
 				}
 		},
@@ -64,7 +71,15 @@ var map = function(){
 					},
 					"user": {
 						"type": "string"
-					},				
+					},	
+					"targetuid": {
+						"uid": {
+							"type" : "string"
+						},
+						"objectType": {
+							"type" : "string"
+						}
+					}			
 				}
 			}
 		}
