@@ -38,6 +38,9 @@ var map = function(){
 					"timestamp": {
 						"type": "date",
 						"format":"dateOptionalTime"
+					},
+					"followup": {
+						"type": "object"						
 					}
 				}
 			},

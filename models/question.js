@@ -7,6 +7,7 @@ var Question = function(uuid, user, title, body, category, timestamp){
 	this.status = 'unanswered';
 	this.title = title;
 	this.timestamp = timestamp;
+	this.followup = [];
 }
 
 module.exports = Question;
