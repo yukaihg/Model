@@ -1,6 +1,6 @@
 var es = require('com.izaakschroeder.elasticsearch'),
 	db = es.connect('localhost'),
-<<<<<<< HEAD
+
 	indice = ['presenter', 'accent'] //, 'engage', 'rqra'];
 	mappings = ['questions', 'comments'];
 	index = db.index('presenter'),
@@ -21,12 +21,6 @@ var switchMapping = function(type) {
 	var mappingType = mappings[type];
 	mapping = index.mapping(mappingType);
 	return mappingType;
-=======
-	index = db.index('presenter'),
-	mapping = index.mapping('questions');
-
-var QueryES = function(){
->>>>>>> 8c444a63c72d9c5af874fc3746d6c13626fcf8f9
 }
 
 //get a question
@@ -192,7 +186,6 @@ var checkType = function(type){
 	mapping = index.mapping('questions');
 }
 
-<<<<<<< HEAD
 //////////////////////////////////////////////////////////////////////////////////////////////////
 // Comments
 //////////////////////////////////////////////////////////////////////////////////////////////////
@@ -348,7 +341,5 @@ QueryES.prototype.updateVote = function(commentID, direction, type, callback){
 		callback();
 	})
 }
-=======
->>>>>>> 8c444a63c72d9c5af874fc3746d6c13626fcf8f9
 
 module.exports = new QueryES;

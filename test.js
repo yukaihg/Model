@@ -2,21 +2,16 @@
 
 var queryES = require('./queryES.js');
 var question = require('./models/question.js');
-<<<<<<< HEAD
 var comment = require('./models/comment.js');
-=======
->>>>>>> 8c444a63c72d9c5af874fc3746d6c13626fcf8f9
 
 //NOTE**
 //for types, 0 = presenter, 1 = accent
 
-<<<<<<< HEAD
 //////////////////////////////////////////////////////////////////////////////////////////////////
 // Questions 
 //////////////////////////////////////////////////////////////////////////////////////////////////
 
-=======
->>>>>>> 8c444a63c72d9c5af874fc3746d6c13626fcf8f9
+
 //*****************GET a question***********************
 //@params: questionID, type, callback
 /*
@@ -57,11 +52,7 @@ queryES.searchAll(searchString, 0, function(result){
 
 //*****************ADD a question***********************
 //Question model takes in (questionID, userID, questionBody, category)
-<<<<<<< HEAD
-var question = new question('randomuid', 'bondjames', 'I would like to travel to Korea', 'travelling');
-=======
 var question = new question('someuidlololol', 'someUserUUID', 'This is the question i asked', 'life');
->>>>>>> 8c444a63c72d9c5af874fc3746d6c13626fcf8f9
 
 //@params: question model, type, callback
 /*
@@ -79,17 +70,12 @@ queryES.updateQuestion('someuidlololol', 'This is my new question', 0, function(
 */
 
 //*****************DELETE a question***********************
-<<<<<<< HEAD
 //@params: questionID, type, callback
-=======
-//@params: questionID, questionBody, type, callback
->>>>>>> 8c444a63c72d9c5af874fc3746d6c13626fcf8f9
 /*
 queryES.deleteQuestion('someuidlololol', 0, function(){
 	console.log("Question deleted");
 })
 */
-<<<<<<< HEAD
 
 //////////////////////////////////////////////////////////////////////////////////////////////////
 // Comments 
@@ -168,5 +154,3 @@ queryES.updateVote('zzz123', 1, 0, function() {
 	console.log("Comment vote updated");
 });
 */
-=======
->>>>>>> 8c444a63c72d9c5af874fc3746d6c13626fcf8f9
