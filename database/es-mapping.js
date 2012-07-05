@@ -75,6 +75,9 @@ var map = function(){
 					"uuid": {
 						"type" : "string"
 					},
+					"title": {
+						"type" : "string"
+					},
 					"objectType": {
 						"type" : "string"
 					},			
