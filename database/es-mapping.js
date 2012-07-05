@@ -2,38 +2,30 @@
 //Do not have to run this.
 
 var es = require('com.izaakschroeder.elasticsearch'),
-	db = es.connect('localhost'),
-	index = db.index('presenter'),
-	mapping = index.mapping('questions');
+	db = es.connect('localhost');
 
 var mapQuestion = function(){
 	var path = "/presenter";
 
-	var data = {
+	var data =
+	{
 		"mappings":{
 		"questions": {
 			"properties": {
-				"body": {
+				"body":
+				{
 					"type": "multi_field",
 					"fields": {
-						"body": {
-							"type": "string"
-						},
+						"body": {"type": "string"},
 						"untouched": {
 							"type": "string",
 							"index": "not_analyzed"
 						}
 					}
 				},
-				"category": {
-					"type": "string"
-				},
-				"status": {
-					"type": "string"
-				},
-				"user": {
-					"type": "string"
-				}
+				"category": {"type": "string"},
+				"status": {"type": "string"},
+				"user": {"type": "string"}
 			}
 		}
 	}
