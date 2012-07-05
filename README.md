@@ -1,7 +1,11 @@
-## Merged with Eric's Question's Model and test.js:
+## Helpful things to get:
+
+* [ES GUI](https://github.com/mobz/elasticsearch-head)
 
 ## Info
 
-- comment.js implemented that follows the question.js format
-- sample functions are experimented in test.js
-- needs improvement with comment's questionIDs and some attributes 
+1. Insert some sample data by running es-insert.js in the database folder
+
+2. Check out the functions in test.js to get an idea. 
+ * I commented out all the functions cause running them async will screwed things up
+ * Recommend running one function at a time...
