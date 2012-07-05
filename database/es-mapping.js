@@ -4,8 +4,8 @@
 var es = require('com.izaakschroeder.elasticsearch'),
 	db = es.connect('localhost');
 
-var map = function(){
-	var path = "/presenter";
+var map = function(appType){
+	var path = "/" + appType;
 
 	var data = {
 		"mappings":{
@@ -93,4 +93,5 @@ var map = function(){
 	})
 };
 
-map();
+map("presenter");
+map("accent");
