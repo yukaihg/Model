@@ -1,7 +1,8 @@
 var es = require('com.izaakschroeder.elasticsearch'),
 	db = es.connect('localhost'),
 	index = db.index('presenter'),
-	mapping = index.mapping('questions');
+	mapping = index.mapping('questions'),
+	error = { errorcode: 1, message: "Error", err: undefined };
 
 var QueryES = function(){
 }
@@ -12,25 +13,30 @@ QueryES.prototype.getQuestion = function(questionID, type, callback){
 
 	if(type === 1){
 		link = '/accent/questions/';
+	} else if (type > 1) {
+		error.message = "not a valid type";
+		callback(data, error);
 	}
 
 	link += questionID;
 
 	db.get(link, {}, function(err, req, data){
-		callback(data._source);
+
+		if(data){
+			callback(data, undefined);
+		}else{
+			error.message = "object not found in database";
+			error.err = err;
+			callback(data, error);
+		}
 	});
 }
 
 QueryES.prototype.getAllQuestionByUserID = function(userID, type, callback){
-	var data = {
+	var data =
+	{
 		query: {
-			bool:{
-				must:[{
-					term:{
-						user: userID
-					}
-				}]
-			}
+			term: { user: userID }
 		},
 		from: 0,
 		size: 20
@@ -40,10 +46,9 @@ QueryES.prototype.getAllQuestionByUserID = function(userID, type, callback){
 
 	mapping.search(data, function(err, data){
 		if(data.hits.total !== 0){
-			callback(data.hits);
-		}
-		else{
-			console.log("User did not ask a question");
+			callback(data);
+		}else{
+			callback(undefined);
 		}
 	});
 }
@@ -58,14 +63,10 @@ QueryES.prototype.searchAll = function(search, type, callback){
 
 	var data = {
 		query: {
-			bool:{
-				must:[{
-					query_string: {
-						default_field: '_all',
-						query: search
-					}
-				}]
-			}
+				query_string: {
+					default_field: '_all',
+					query: search
+				}
 		},
 		from: 0,
 		size: 20
@@ -76,8 +77,7 @@ QueryES.prototype.searchAll = function(search, type, callback){
 	index.search(data, function(err, data){
 		if(data.hits.total !== 0){
 			callback(data.hits);
-		}
-		else{
+		}else{
 			console.log("Nothing found");
 		}
 	});
@@ -92,7 +92,6 @@ QueryES.prototype.addQuestion = function(data, type, callback){
 	checkType(type);
 
 	document = mapping.document(data.id);
-
 	document.set(data, function(){
 		callback();
 	});
@@ -102,19 +101,17 @@ QueryES.prototype.addQuestion = function(data, type, callback){
 //update question body
 QueryES.prototype.updateQuestion = function(questionID, questionBody, type, callback){
 	var link = '/presenter/questions/';
+	var data =
+	{
+		'script':'ctx._source.body = body',
+		'params':{ 'body':questionBody }
+	}
 
 	if(type === 1){
 		link = '/accent/questions/';
 	}
 
 	link += questionID +'/_update';
-
-	var data = {
-		'script':'ctx._source.body = body',
-		'params':{
-			'body':questionBody
-		}
-	}
 
 	db.post(link, data, function(){
 		callback();
@@ -137,19 +134,17 @@ QueryES.prototype.deleteQuestion = function(questionID, type, callback){
 //change the status of a question from unanswered to answered
 QueryES.prototype.updateStatus = function(questionID, type, callback){
 	var link = '/presenter/questions/';
+	var data =
+	{
+		'script':'ctx._source.status = status',
+		'params':{ 'status':'answered' }
+	}
 
 	if(type === 1){
 		link = '/accent/questions/';
 	}
 
 	link += questionID +'/_update';
-
-	var data = {
-		'script':'ctx._source.status = status',
-		'params':{
-			'status':'answered'
-		}
-	}
 
 	//add new comment to the document found at uid
 	db.post(link, data, function(){
