@@ -4,8 +4,7 @@ var es = require('com.izaakschroeder.elasticsearch'),
 	indice = ['presenter', 'accent'] //, 'engage', 'rqra'];
 	mappings = ['questions', 'comments'];
 	index = db.index('presenter'),
-	mapping = index.mapping('questions'),
-	error = { errorcode: 1, message: "Error", err: undefined };
+	mapping = index.mapping('questions');
 
 var QueryES = function() {	
 }
@@ -30,21 +29,18 @@ QueryES.prototype.getQuestion = function(questionID, type, callback){
 
 	if(type === 1){
 		link = '/accent/questions/';
-	} else if (type > 1) {
-		error.message = "not a valid type";
-		callback(data, error);
 	}
 
 	link += questionID;
 
 	db.get(link, {}, function(err, req, data){
 
+		if(err) throw err;
+
 		if(data){
-			callback(data, undefined);
+			callback(data);
 		}else{
-			error.message = "object not found in database";
-			error.err = err;
-			callback(data, error);
+			callback(undefined);
 		}
 	});
 }
@@ -130,7 +126,8 @@ QueryES.prototype.updateQuestion = function(questionID, questionBody, type, call
 
 	link += questionID +'/_update';
 
-	db.post(link, data, function(){
+	db.post(link, data, function(err, req, data){
+		console.log(data);
 		callback();
 	})
 }
