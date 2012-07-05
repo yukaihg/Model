@@ -2,7 +2,7 @@
 //Do not have to run this.
 
 var es = require('com.izaakschroeder.elasticsearch'),
-	db = es.connect('localhost'),
+	db = es.connect('localhost');
 
 var map = function(){
 	var path = "/presenter";
@@ -32,9 +32,6 @@ var map = function(){
 					"user": {
 						"type": "string"
 					},
-					"isAnswered": {
-						"type": "string"
-					},
 					"title": {
 						"type": "string"
 					},
@@ -43,9 +40,9 @@ var map = function(){
 						"format":"dateOptionalTime"
 					}
 				}
-		},
+			},
 
-		"comments": {
+			"comments": {
 				"properties": {
 					"body": {
 						"type": "multi_field",
@@ -79,7 +76,10 @@ var map = function(){
 						"objectType": {
 							"type" : "string"
 						}
-					}			
+					},			
+					"isAnswered": {
+						"type": "string"
+					}
 				}
 			}
 		}

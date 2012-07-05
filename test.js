@@ -14,11 +14,11 @@ var comment = require('./models/comment.js');
 
 //*****************GET a question***********************
 //@params: questionID, type, callback
-
+/*
 queryES.getQuestion('ddd', 0, function(result){
 	console.log(result);
 });
-
+*/
 
 //*****************GET all question by user uuid********
 /*
@@ -63,11 +63,11 @@ queryES.addQuestion(question, 0, function(){
 
 //*****************UPDATE a question**********************
 //@params: questionID, questionBody, type, callback
-/*
-queryES.updateQuestion('someuidlololol', 'This is my new question', 0, function(){
+
+queryES.updateQuestion('pJfznhheQuOicWWAjx7F03', 'This is my new question', 0, function(){
 	console.log("Question updated, check ES");
 });
-*/
+
 
 //*****************DELETE a question***********************
 //@params: questionID, type, callback
@@ -121,11 +121,11 @@ queryES.updateComment('universal', 'toy story', 0, function(){
 
 //*****************DELETE a comment***********************
 //@params: commentID, type, callback
-
+/*
 queryES.deleteComment('universal', 0, function(){
 	console.log("Comment deleted");
 })
-
+*/
 
 //*****************Append a commentID to a question***********************
 //
