@@ -10,190 +10,35 @@ var QueryES = function() {
 }
 
 // change the index to whatever you want
-var switchIndex = function(type) {
-	var indexType = indice[type];
+var switchIndex = function(appType) {
+	var indexType = indice[appType];
 	index = db.index(indexType);
 	return indexType;
 }
 
 // change the mapping to whatever you want
-var switchMapping = function(type) {
-	var mappingType = mappings[type];
+var switchMapping = function(appType) {
+	var mappingType = mappings[appType];
 	mapping = index.mapping(mappingType);
 	return mappingType;
 }
 
 //get a question
-QueryES.prototype.getQuestion = function(questionID, type, callback){
+QueryES.prototype.getQuestion = function(questionID, appType, callback){
 	var link = '/presenter/questions/';
 
-	if(type === 1){
+	if(appType === 1){
 		link = '/accent/questions/';
 	}
 
 	link += questionID;
 
 	db.get(link, {}, function(err, req, data){
-
-		if(err) throw err;
-
-		if(data){
-			callback(data);
-		}else{
-			callback(undefined);
-		}
-	});
-}
-
-QueryES.prototype.getAllQuestionByUserID = function(userID, type, callback){
-	var data =
-	{
-		query: {
-			term: { user: userID }
-		},
-		from: 0,
-		size: 20
-	};
-
-	checkType(type);
-
-	mapping.search(data, function(err, data){
-		if(data.hits.total !== 0){
-			callback(data);
-		}else{
-			callback(undefined);
-		}
-	});
-}
-
-//search based on query
-QueryES.prototype.searchAll = function(search, type, callback){
-
-	if(!search){
-		console.log("empty");
-		return;
-	}
-
-	var data = {
-		query: {
-				query_string: {
-					default_field: '_all',
-					query: search
-				}
-		},
-		from: 0,
-		size: 20
-	};
-
-	checkType(type);
-
-	index.search(data, function(err, data){
-		if(data.hits.total !== 0){
-			callback(data.hits);
-		}else{
-			console.log("Nothing found");
-		}
-	});
-}
-
-
-
-//Add a new question
-QueryES.prototype.addQuestion = function(data, type, callback){
-	var document;
-
-	checkType(type);
-
-	document = mapping.document(data.id);
-	document.set(data, function(){
-		callback();
-	});
-}
-
-
-//update question body
-QueryES.prototype.updateQuestion = function(questionID, questionBody, type, callback){
-	var link = '/presenter/questions/';
-	var data =
-	{
-		'script':'ctx._source.body = body',
-		'params':{ 'body':questionBody }
-	}
-
-	if(type === 1){
-		link = '/accent/questions/';
-	}
-
-	link += questionID +'/_update';
-
-	db.post(link, data, function(err, req, data){
-		console.log(data);
-		callback();
-	})
-}
-
-//delete a uid
-QueryES.prototype.deleteQuestion = function(questionID, type, callback){
-	var document;
-
-	checkType(type);
-
-	document = mapping.document(questionID);
-	document.delete(function(){
-		callback();
-	});
-}
-
-
-//change the status of a question from unanswered to answered
-QueryES.prototype.updateStatus = function(questionID, type, callback){
-	var link = '/presenter/questions/';
-	var data =
-	{
-		'script':'ctx._source.status = status',
-		'params':{ 'status':'answered' }
-	}
-
-	if(type === 1){
-		link = '/accent/questions/';
-	}
-
-	link += questionID +'/_update';
-
-	//add new comment to the document found at uid
-	db.post(link, data, function(){
-		callback();
-	})
-}
-
-
-//types: 0 = presenter, 1 = accent
-var checkType = function(type){
-	if (type === 0){
-		index = db.index('presenter')
-	}else{
-		index = db.index('accent');
-	}
-
-	mapping = index.mapping('questions');
-}
-
-//////////////////////////////////////////////////////////////////////////////////////////////////
-// Comments
-//////////////////////////////////////////////////////////////////////////////////////////////////
-
-//get a comment data based on commentID
-QueryES.prototype.getComment = function(commentID, type, callback){
-
-	var link = '/' + switchIndex(type) + '/comments/' + commentID;
-	
-	db.get(link, {}, function(err, req, data){
 		callback(data._source);
 	});
 }
 
-//get all question data based on questionID
-QueryES.prototype.getAllCommentByUserID = function(userID, type, callback){
+QueryES.prototype.getAllQuestionByUserID = function(userID, appType, callback){
 	var data = {
 		query: {
 			bool:{
@@ -208,7 +53,170 @@ QueryES.prototype.getAllCommentByUserID = function(userID, type, callback){
 		size: 20
 	};
 
-	checkType(type);
+	checkType(appType);
+
+	mapping.search(data, function(err, data){
+		if(data.hits.total !== 0){
+			callback(data.hits);
+		}
+		else{
+			console.log("User did not ask a question");
+		}
+	});
+}
+
+//search based on query
+QueryES.prototype.searchAll = function(search, appType, callback){
+
+	if(!search){
+		console.log("empty");
+		return;
+	}
+
+	var data = {
+		query: {
+			bool:{
+				must:[{
+					query_string: {
+						default_field: '_all',
+						query: search
+					}
+				}]
+			}
+		},
+		from: 0,
+		size: 20
+	};
+
+	checkType(appType);
+
+	index.search(data, function(err, data){
+		if(data.hits.total !== 0){
+			callback(data.hits);
+		}
+		else{
+			console.log("Nothing found");
+		}
+	});
+}
+
+
+
+//Add a new question
+QueryES.prototype.addQuestion = function(data, appType, callback){
+	var document;
+
+	checkType(appType);
+
+	document = mapping.document(data.id);
+
+	document.set(data, function(){
+		callback();
+	});
+}
+
+
+//update question body
+QueryES.prototype.updateQuestion = function(questionID, questionBody, appType, callback){
+	var link = '/presenter/questions/';
+
+	if(appType === 1){
+		link = '/accent/questions/';
+	}
+
+	link += questionID +'/_update';
+
+	var data = {
+		'script':'ctx._source.body = body',
+		'params':{
+			'body':questionBody
+		}
+	}
+
+	db.post(link, data, function(){
+		callback();
+	})
+}
+
+//delete a uid
+QueryES.prototype.deleteQuestion = function(questionID, appType, callback){
+	var document;
+
+	checkType(appType);
+
+	document = mapping.document(questionID);
+	document.delete(function(){
+		callback();
+	});
+}
+
+
+//change the status of a question from unanswered to answered
+QueryES.prototype.updateStatus = function(questionID, appType, callback){
+	var link = '/presenter/questions/';
+
+	if(appType === 1){
+		link = '/accent/questions/';
+	}
+
+	link += questionID +'/_update';
+
+	var data = {
+		'script':'ctx._source.status = status',
+		'params':{
+			'status':'answered'
+		}
+	}
+
+	//add new comment to the document found at uid
+	db.post(link, data, function(){
+		callback();
+	})
+}
+
+
+//types: 0 = presenter, 1 = accent
+var checkType = function(appType){
+	if (appType === 0){
+		index = db.index('presenter')
+	}else{
+		index = db.index('accent');
+	}
+
+	mapping = index.mapping('questions');
+}
+
+//////////////////////////////////////////////////////////////////////////////////////////////////
+// Comments
+//////////////////////////////////////////////////////////////////////////////////////////////////
+
+//get a comment data based on commentID
+QueryES.prototype.getComment = function(commentID, appType, callback){
+
+	var link = '/' + switchIndex(appType) + '/comments/' + commentID;
+	
+	db.get(link, {}, function(err, req, data){
+		callback(data._source);
+	});
+}
+
+//get all comment data based on userID for now
+QueryES.prototype.getAllCommentByUserID = function(userID, appType, callback){
+	var data = {
+		query: {
+			bool:{
+				must:[{
+					term:{
+						user: userID
+					}
+				}]
+			}
+		},
+		from: 0,
+		size: 20
+	};
+
+	checkType(appType);
 
 	mapping = index.mapping('comments');
 
@@ -224,10 +232,10 @@ QueryES.prototype.getAllCommentByUserID = function(userID, type, callback){
 }
 
 //create a new comment
-QueryES.prototype.addComment = function(data, type, callback){
+QueryES.prototype.addComment = function(data, appType, callback){
 	var document;
 
-	checkType(type);
+	checkType(appType);
 
 	mapping = index.mapping('comments');
 	
@@ -238,10 +246,10 @@ QueryES.prototype.addComment = function(data, type, callback){
 	});
 }
 
-//update question body based on questionID
-QueryES.prototype.updateComment = function(commentID, comment, type, callback){	
+//update comment body based on commentID
+QueryES.prototype.updateComment = function(commentID, comment, appType, callback){	
 
-	var link = '/' + switchIndex(type) + '/comments/' + commentID +'/_update';
+	var link = '/' + switchIndex(appType) + '/comments/' + commentID +'/_update';
 
 	var data = {
 		'script':'ctx._source.body = body',
@@ -256,10 +264,10 @@ QueryES.prototype.updateComment = function(commentID, comment, type, callback){
 }
 
 //delete a comment
-QueryES.prototype.deleteComment = function(commentID, type, callback){
+QueryES.prototype.deleteComment = function(commentID, appType, callback){
 	var document;
 
-	checkType(type);
+	checkType(appType);
 	mapping = index.mapping('comments');	
 
 	document = mapping.document(commentID);
@@ -271,8 +279,8 @@ QueryES.prototype.deleteComment = function(commentID, type, callback){
 
 
 //append a comment questionID to a comment's id list
-QueryES.prototype.appendCommentID = function(questionID, commentID, type, callback){
-	var link = '/' + switchIndex(type) + '/comments/' + questionID +'/_update';
+QueryES.prototype.appendCommentID = function(questionID, commentID, appType, callback){
+	var link = '/' + switchIndex(appType) + '/comments/' + questionID +'/_update';
 
 	var data = {
 		'script':'ctx._source.commentIDs += commentID',
@@ -288,8 +296,8 @@ QueryES.prototype.appendCommentID = function(questionID, commentID, type, callba
 }
 
 //delete a comment questionID to a comment's id list
-QueryES.prototype.deleteCommentID = function(questionID, commentID, type, callback){
-	var link = '/' + switchIndex(type) + '/comments/' + questionID +'/_update';
+QueryES.prototype.deleteCommentID = function(questionID, commentID, appType, callback){
+	var link = '/' + switchIndex(appType) + '/comments/' + questionID +'/_update';
 
 	var data = {
 		'script':'ctx._source.commentIDs.remove(commentID)',
@@ -305,10 +313,10 @@ QueryES.prototype.deleteCommentID = function(questionID, commentID, type, callba
 }
 
 //update a comment vote
-QueryES.prototype.updateVote = function(commentID, direction, type, callback){
+QueryES.prototype.updateVote = function(commentID, direction, appType, callback){
 	var data;
 
-	var link = '/' + switchIndex(type) + '/comments/' + commentID +'/_update';
+	var link = '/' + switchIndex(appType) + '/comments/' + commentID +'/_update';
 
 	if (direction === 0) {
 		data = {
