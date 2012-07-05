@@ -10,11 +10,12 @@
 */	
 
 //Comment Model
-var Comment = function(uuid, user, body){
+var Comment = function(uuid, user, title, body){
 	this.id = uuid;
 	this.user = user;
 	this.upvote = 0;
 	this.downvote = 0;
+	this.title = title;
 	this.body = body;	
 	this.target_uuid = '';
 	this.objectType = '';
