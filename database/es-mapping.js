@@ -33,7 +33,16 @@ var map = function(appType){
 						"type": "string"
 					},
 					"title": {
-						"type": "string"
+						"type": "multi_field",
+						"fields": {
+							"title": {
+								"type": "string"
+							},
+							"untouched": {
+								"type": "string",
+								"index": "not_analyzed"
+							}
+						}
 					},
 					"timestamp": {
 						"type": "date",
@@ -76,7 +85,16 @@ var map = function(appType){
 						"type" : "string"
 					},
 					"title": {
-						"type" : "string"
+						"type": "multi_field",
+						"fields": {
+							"title": {
+								"type": "string"
+							},
+							"untouched": {
+								"type": "string",
+								"index": "not_analyzed"
+							}
+						}
 					},
 					"objectType": {
 						"type" : "string"
