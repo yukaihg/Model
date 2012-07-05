@@ -72,13 +72,11 @@ var map = function(){
 					"user": {
 						"type": "string"
 					},	
-					"targetuid": {
-						"uid": {
-							"type" : "string"
-						},
-						"objectType": {
-							"type" : "string"
-						}
+					"uuid": {
+						"type" : "string"
+					},
+					"objectType": {
+						"type" : "string"
 					},			
 					"isAnswered": {
 						"type": "string"
