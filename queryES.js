@@ -1,10 +1,27 @@
 var es = require('com.izaakschroeder.elasticsearch'),
 	db = es.connect('localhost'),
+
+	indice = ['presenter', 'accent'] //, 'engage', 'rqra'];
+	mappings = ['questions', 'comments'];
 	index = db.index('presenter'),
 	mapping = index.mapping('questions'),
 	error = { errorcode: 1, message: "Error", err: undefined };
 
-var QueryES = function(){
+var QueryES = function() {	
+}
+
+// change the index to whatever you want
+var switchIndex = function(type) {
+	var indexType = indice[type];
+	index = db.index(indexType);
+	return indexType;
+}
+
+// change the mapping to whatever you want
+var switchMapping = function(type) {
+	var mappingType = mappings[type];
+	mapping = index.mapping(mappingType);
+	return mappingType;
 }
 
 //get a question
@@ -164,5 +181,160 @@ var checkType = function(type){
 	mapping = index.mapping('questions');
 }
 
+//////////////////////////////////////////////////////////////////////////////////////////////////
+// Comments
+//////////////////////////////////////////////////////////////////////////////////////////////////
+
+//get a comment data based on commentID
+QueryES.prototype.getComment = function(commentID, type, callback){
+
+	var link = '/' + switchIndex(type) + '/comments/' + commentID;
+	
+	db.get(link, {}, function(err, req, data){
+		callback(data._source);
+	});
+}
+
+//get all question data based on questionID
+QueryES.prototype.getAllCommentByUserID = function(userID, type, callback){
+	var data = {
+		query: {
+			bool:{
+				must:[{
+					term:{
+						user: userID
+					}
+				}]
+			}
+		},
+		from: 0,
+		size: 20
+	};
+
+	checkType(type);
+
+	mapping = index.mapping('comments');
+
+	mapping.search(data, function(err, data){
+		if(data.hits.total !== 0){
+			callback(data.hits);
+		}
+		else{
+			callback(data);
+			console.log("User did not post any comments");
+		}
+	});
+}
+
+//create a new comment
+QueryES.prototype.addComment = function(data, type, callback){
+	var document;
+
+	checkType(type);
+
+	mapping = index.mapping('comments');
+	
+	document = mapping.document(data.id);
+
+	document.set(data, function(){
+		callback();
+	});
+}
+
+//update question body based on questionID
+QueryES.prototype.updateComment = function(commentID, comment, type, callback){	
+
+	var link = '/' + switchIndex(type) + '/comments/' + commentID +'/_update';
+
+	var data = {
+		'script':'ctx._source.body = body',
+		'params':{
+			'body':comment
+		}
+	}
+
+	db.post(link, data, function(){
+		callback();
+	})
+}
+
+//delete a comment
+QueryES.prototype.deleteComment = function(commentID, type, callback){
+	var document;
+
+	checkType(type);
+	mapping = index.mapping('comments');	
+
+	document = mapping.document(commentID);
+	document.delete(function(){
+		callback();
+	});
+}
+
+
+
+//append a comment questionID to a comment's id list
+QueryES.prototype.appendCommentID = function(questionID, commentID, type, callback){
+	var link = '/' + switchIndex(type) + '/comments/' + questionID +'/_update';
+
+	var data = {
+		'script':'ctx._source.commentIDs += commentID',
+		'params':{
+			'commentID':commentID
+		}
+	}
+	
+	//add new comment to the document found at questionID
+	db.post(link, data, function(){
+		callback();
+	})
+}
+
+//delete a comment questionID to a comment's id list
+QueryES.prototype.deleteCommentID = function(questionID, commentID, type, callback){
+	var link = '/' + switchIndex(type) + '/comments/' + questionID +'/_update';
+
+	var data = {
+		'script':'ctx._source.commentIDs.remove(commentID)',
+		'params':{
+			'commentID':commentID
+		}
+	}
+	
+	//add new comment to the document found at questionID
+	db.post(link, data, function(){
+		callback();
+	})
+}
+
+//update a comment vote
+QueryES.prototype.updateVote = function(commentID, direction, type, callback){
+	var data;
+
+	var link = '/' + switchIndex(type) + '/comments/' + commentID +'/_update';
+
+	if (direction === 0) {
+		data = {
+			'script':'ctx._source.upvote += upvote',
+			'params':{
+				'upvote':1
+			}
+		}
+	}
+	else {
+		data = {
+			'script':'ctx._source.downvote += downvote',
+			'params':{
+				'downvote':1
+			}
+		}
+	}
+
+	//increment the vote found at commentID
+	db.post(link, data, function(){
+		// increment
+		callback();
+	})
+}
 
 module.exports = new QueryES;
