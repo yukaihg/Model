@@ -224,6 +224,7 @@ QueryES.prototype.getAllCommentByUserID = function(userID, type, callback){
 			callback(data.hits);
 		}
 		else{
+			callback(data);
 			console.log("User did not post any comments");
 		}
 	});
