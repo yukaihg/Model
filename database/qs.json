@@ -1,0 +1,230 @@
+[{
+"_index":"presenter",
+"_type":"questions",
+"_id":"pJfznhheQuOicWWAjx7F00",
+"_score":1,
+"_source":
+	{"user":"jbo1",
+	"body":"When can we register for courses?",
+	"category":"academic",
+	"status":"answered"
+	}
+},
+{
+	"_index":"presenter",
+	"_type":"questions",
+	"_id":"pddznhheAD1icWWAjx7F00",
+	"_score":1,
+	"_source":
+	{"user":"jbo1",
+		"body":"What is life?",
+		"category":"academic",
+		"status":"answered"
+	}
+},
+{
+"_index":"presenter",
+"_type":"comments",
+"_id":"qJfznhheQuOicWWAjx7F00",
+"_score":1,
+"_source":
+	{"user":"mkn3",
+	"upvote":"0",
+	"downvote":"0",
+	"body":"The answer to your question is...",
+	"questionIDs":"pJfznhheQuOicWWAjx7F00",
+	"timestamp":"2012-06-30"
+	}
+},
+{
+"_index":"presenter",
+"_type":"questions",
+"_id":"pJfznhheQuOicWWAjx7F01",
+"_score":1,
+"_source":
+	{"user":"kga21",
+	"body":"What can we do before classes start?",
+	"category":"academic",
+	"status":"answered"
+	}
+},
+{
+"_index":"presenter",
+"_type":"comments",
+"_id":"qJfznhheQuOicWWAjx7F01",
+"_score":1,
+"_source":
+	{"user":"nda1",
+	"upvote":"3",
+	"downvote":"1",
+	"body":"I believe it is...",
+	"questionIDs":"pJfznhheQuOicWWAjx7F01",
+	"timestamp":"2012-06-01"
+	}
+},
+{
+"_index":"presenter",
+"_type":"questions",
+"_id":"pJfznhheQuOicWWAjx7F02",
+"_score":1,
+"_source":
+	{"user":"abc11",
+	"body":"Why should you exercise this?",
+	"category":"sports",
+	"status":"answered"
+	}
+},
+{
+"_index":"presenter",
+"_type":"comments",
+"_id":"qJfznhheQuOicWWAjx7F02",
+"_score":1,
+"_source":
+	{"user":"gax23",
+	"upvote":"10",
+	"downvote":"2",
+	"body":"The benefit of this exercise...",
+	"questionIDs":"pJfznhheQuOicWWAjx7F02",
+	"timestamp":"2012-06-14"
+	}
+},
+{
+"_index":"presenter",
+"_type":"questions",
+"_id":"pJfznhheQuOicWWAjx7F03",
+"_score":1,
+"_source":
+	{"user":"kjh61",
+	"body":"Where can I get some good food?",
+	"category":"food",
+	"status":"answered"
+	}
+},
+{
+"_index":"presenter",
+"_type":"comments",
+"_id":"qJfznhheQuOicWWAjx7F03",
+"_score":1,
+"_source":
+	{"user":"xcv73",
+	"upvote":"0",
+	"downvote":"10",
+	"body":"McDonald is usually the...",
+	"questionIDs":"pJfznhheQuOicWWAjx7F03",
+	"timestamp":"2012-07-01"
+	}
+},
+{
+"_index":"presenter",
+"_type":"questions",
+"_id":"pJfznhheQuOicWWAjx7F04",
+"_score":1,
+"_source":
+	{"user":"lol21",
+	"body":"Where can I buy good computers?",
+	"category":"eletronics",
+	"status":"answered"
+	}
+},
+{
+"_index":"presenter",
+"_type":"comments",
+"_id":"qJfznhheQuOicWWAjx7F04",
+"_score":1,
+"_source":
+	{"user":"zzz13",
+	"upvote":"5",
+	"downvote":"0",
+	"body":"Usally the computer place down the corner...",
+	"questionIDs":"pJfznhheQuOicWWAjx7F04",
+	"timestamp":"2012-06-19"
+	}
+},
+{
+"_index":"presenter",
+"_type":"questions",
+"_id":"pJfznhheQuOicWWAjx7F05",
+"_score":1,
+"_source":
+	{"user":"hbc",
+	"body":"Where can I make great friends?",
+	"category":"social",
+	"status":"answered"
+	}
+},
+{
+"_index":"presenter",
+"_type":"comments",
+"_id":"qJfznhheQuOicWWAjx7F05",
+"_score":1,
+"_source":
+	{"user":"mcs3",
+	"upvote":"15",
+	"downvote":"0",
+	"body":"The club in downtown...",
+	"questionIDs":"pJfznhheQuOicWWAjx7F05",
+	"timestamp":"2012-06-29"
+	}
+},
+{
+"_index":"presenter",
+"_type":"questions",
+"_id":"pJfznhheQuOicWWAjx7F06",
+"_score":1,
+"_source":
+	{"user":"mcm1",
+	"body":"I would like to travel to differnt countries and I would like to know where I can find more information?",
+	"category":"travel",
+	"status":"unanswered"
+	}
+},
+{
+"_index":"presenter",
+"_type":"questions",
+"_id":"pJfznhheQuOicWWAjx7F07",
+"_score":1,
+"_source":
+	{"user":"icq",
+	"body":"Anyone who would like to join me for Diablo, contact me at 604-492-1938",
+	"category":"entertainment",
+	"status":"unanswered"
+	}
+},
+{
+"_index":"presenter",
+"_type":"questions",
+"_id":"pJfznhheQuOicWWAjx7F08",
+"_score":1,
+"_source":
+	{"user":"sos7",
+	"body":"Let's watch some movies together",
+	"category":"entertainment",
+	"status":"unanswered"
+	}
+},
+{
+"_index":"presenter",
+"_type":"questions",
+"_id":"pJfznhheQuOicWWAjx7F06",
+"_score":1,
+"_source":
+	{"user":"wtb0",
+	"body":"I would like to buy the MATH 101 textbooks...",
+	"category":"book",
+	"status":"unanswered"
+	}
+},
+{
+"_index":"presenter",
+"_type":"questions",
+"_id":"pJfznhheQuOicWWAjx7F09",
+"_score":1,
+"_source":
+	{"user":"ggg",
+	"body":"How do I become good in CS?",
+	"category":"book",
+	"status":"unanswered"
+	}
+}
+
+]
