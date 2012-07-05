@@ -40,7 +40,7 @@ var map = function(appType){
 						"format":"dateOptionalTime"
 					},
 					"followup": {
-						"type": "object"						
+						"type": "object"
 					}
 				}
 			},
