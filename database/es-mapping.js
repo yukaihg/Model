@@ -40,7 +40,7 @@ var map = function(){
 						"format":"dateOptionalTime"
 					},
 					"followup": {
-						"type": "object"						
+						"type": "object"
 					}
 				}
 			},
