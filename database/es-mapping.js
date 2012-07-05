@@ -3,47 +3,75 @@
 
 var es = require('com.izaakschroeder.elasticsearch'),
 	db = es.connect('localhost'),
-	index = db.index('presenter'),
-	mapping = index.mapping('questions');
 
-var mapQuestion = function(){
+var map = function(){
 	var path = "/presenter";
 
 	var data = {
 		"mappings":{
-		"questions": {
-			"properties": {
-				"body": {
-					"type": "multi_field",
-					"fields": {
-						"body": {
-							"type": "string"
-						},
-						"untouched": {
-							"type": "string",
-							"index": "not_analyzed"
+			"questions": {
+				"properties": {
+					"body": {
+						"type": "multi_field",
+						"fields": {
+							"body": {
+								"type": "string"
+							},
+							"untouched": {
+								"type": "string",
+								"index": "not_analyzed"
+							}
 						}
+					},
+					"category": {
+						"type": "string"
+					},
+					"status": {
+						"type": "string"
+					},
+					"user": {
+						"type": "string"
+					},
+					"isAnswered": {
+						"type": "string"
 					}
-				},
-				"category": {
-					"type": "string"
-				},
-				"status": {
-					"type": "string"
-				},
-				"user": {
-					"type": "string"
+				}
+		},
+
+		"comments": {
+				"properties": {
+					"body": {
+						"type": "multi_field",
+						"fields": {
+							"body": {
+								"type": "string"
+							},
+							"untouched": {
+								"type": "string",
+								"index": "not_analyzed"
+							}
+						}
+					},
+					"upvote": {
+						"type": "string"
+					},
+					"downvote": {
+						"type": "string"
+					},
+					"timestamp": {
+						"type": "date",
+						"format":"dateOptionalTime"
+					},
+					"user": {
+						"type": "string"
+					},				
 				}
 			}
 		}
-	}
 	}
 	db.post(path, data, function(err, req, data){
 		console.log(data);
 	})
 };
 
-var mapComment;
-
-
-mapQuestion();
+map();
