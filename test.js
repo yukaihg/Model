@@ -66,18 +66,18 @@ queryES.addQuestion(question, 0, function(){
 
 //@params: question model, type, callback
 /*
- queryES.addFollower('pJfzndwdadddQuOicWWAjx7F00', 'mcs3', 0, function(){
+ queryES.addFollower('pJfzndwdadddQuOicWWAjx7F00', 'ddd', 0, function(){
  console.log("Follower added, check ES");
  });
 */
 
 //*****************UPDATE a question**********************
 //@params: questionID, questionBody, type, callback
-
+/*
 queryES.updateQuestion('pJfzndwdadddQuOicWWAjx7F00', 'Z for question', 0, function(){
 	console.log("Question updated, check ES");
 });
-
+*/
 
 //*****************DELETE a question***********************
 //@params: questionID, type, callback
