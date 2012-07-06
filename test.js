@@ -15,7 +15,7 @@ var comment = require('./models/comment.js');
 //*****************GET a question***********************
 //@params: questionID, type, callback
 /*
-queryES.getQuestion('ddd', 0, function(result){
+queryES.getQuestion('aJfzndwdadddQuOicWWAjx7F00', 1, function(result){
 	console.log(result);
 });
 */
@@ -29,7 +29,7 @@ so that results are meaningful
 
 //@params: userID, type, callback
 /*
-queryES.getAllQuestionByUserID('dddd', 0, function(result){
+queryES.getAllQuestionByUserID('jbo1', 0, function(result){
 	//You should get 2 sets of result
 	//console.log('Found: ' + result.total);
 	//console.log(JSON.stringify(result.hits));
@@ -39,7 +39,7 @@ queryES.getAllQuestionByUserID('dddd', 0, function(result){
 */
 
 //*****************SEARCH all based on project type*****
-var searchString = 'exercise benefit';
+var searchString = 'the fuck';
 
 //@params: search string, type, callback
 /*
@@ -63,11 +63,11 @@ queryES.addQuestion(question, 0, function(){
 
 //*****************UPDATE a question**********************
 //@params: questionID, questionBody, type, callback
-
+/*
 queryES.updateQuestion('pJfznhheQuOicWWAjx7F03', 'This is my new question', 0, function(){
 	console.log("Question updated, check ES");
 });
-
+*/
 
 //*****************DELETE a question***********************
 //@params: questionID, type, callback
@@ -84,7 +84,7 @@ queryES.deleteQuestion('someuidlololol', 0, function(){
 //*****************GET a comment***********************
 //@params: commentID, type, callback
 /*
-queryES.getComment('universal', 0, function(result){
+queryES.getComment('aJfzggggguOicWWAjx7F05', 1, function(result){
 	console.log(result);
 });
 */

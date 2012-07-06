@@ -2,7 +2,7 @@ var es = require('com.izaakschroeder.elasticsearch'),
 	db = es.connect('localhost'),
 
 	indice = ['presenter', 'accent'] //, 'engage', 'rqra'];
-	mappings = ['questions', 'comments'];
+	mappings = ['questions', 'comments'],
 	index = db.index('presenter'),
 	mapping = index.mapping('questions');
 
@@ -25,13 +25,7 @@ var switchMapping = function(appType) {
 
 //get a question
 QueryES.prototype.getQuestion = function(questionID, appType, callback){
-	var link = '/presenter/questions/';
-
-	if(appType === 1){
-		link = '/accent/questions/';
-	}
-
-	link += questionID;
+	var link = '/' + switchIndex(appType) + '/questions/' + questionID;
 
 	db.get(link, {}, function(err, req, data){
 		callback(data._source);
@@ -53,7 +47,8 @@ QueryES.prototype.getAllQuestionByUserID = function(userID, appType, callback){
 		size: 20
 	};
 
-	checkType(appType);
+	switchIndex(appType);
+	switchMapping(0);
 
 	mapping.search(data, function(err, data){
 		if(data.hits.total !== 0){
@@ -88,7 +83,8 @@ QueryES.prototype.searchAll = function(search, appType, callback){
 		size: 20
 	};
 
-	checkType(appType);
+	switchIndex(appType);
+	switchMapping(0);
 
 	index.search(data, function(err, data){
 		if(data.hits.total !== 0){
@@ -106,7 +102,8 @@ QueryES.prototype.searchAll = function(search, appType, callback){
 QueryES.prototype.addQuestion = function(data, appType, callback){
 	var document;
 
-	checkType(appType);
+	switchIndex(appType);
+	switchMapping(0);
 
 	document = mapping.document(data.id);
 
@@ -118,13 +115,7 @@ QueryES.prototype.addQuestion = function(data, appType, callback){
 
 //update question body
 QueryES.prototype.updateQuestion = function(questionID, questionBody, appType, callback){
-	var link = '/presenter/questions/';
-
-	if(appType === 1){
-		link = '/accent/questions/';
-	}
-
-	link += questionID +'/_update';
+	var link = '/' + switchIndex(appType) + '/questions/' + questionID + '/_update';
 
 	var data = {
 		'script':'ctx._source.body = body',
@@ -142,7 +133,8 @@ QueryES.prototype.updateQuestion = function(questionID, questionBody, appType, c
 QueryES.prototype.deleteQuestion = function(questionID, appType, callback){
 	var document;
 
-	checkType(appType);
+	switchIndex(appType);
+	switchMapping(0);
 
 	document = mapping.document(questionID);
 	document.delete(function(){
@@ -153,13 +145,7 @@ QueryES.prototype.deleteQuestion = function(questionID, appType, callback){
 
 //change the status of a question from unanswered to answered
 QueryES.prototype.updateStatus = function(questionID, appType, callback){
-	var link = '/presenter/questions/';
-
-	if(appType === 1){
-		link = '/accent/questions/';
-	}
-
-	link += questionID +'/_update';
+	var link = '/' + switchIndex(appType) + '/questions/' + questionID + '/_update';
 
 	var data = {
 		'script':'ctx._source.status = status',
@@ -174,17 +160,6 @@ QueryES.prototype.updateStatus = function(questionID, appType, callback){
 	})
 }
 
-
-//types: 0 = presenter, 1 = accent
-var checkType = function(appType){
-	if (appType === 0){
-		index = db.index('presenter')
-	}else{
-		index = db.index('accent');
-	}
-
-	mapping = index.mapping('questions');
-}
 
 //////////////////////////////////////////////////////////////////////////////////////////////////
 // Comments
@@ -216,9 +191,8 @@ QueryES.prototype.getAllCommentByUserID = function(userID, appType, callback){
 		size: 20
 	};
 
-	checkType(appType);
-
-	mapping = index.mapping('comments');
+	switchIndex(appType);
+	switchMapping(1);
 
 	mapping.search(data, function(err, data){
 		if(data.hits.total !== 0){
@@ -235,10 +209,9 @@ QueryES.prototype.getAllCommentByUserID = function(userID, appType, callback){
 QueryES.prototype.addComment = function(data, appType, callback){
 	var document;
 
-	checkType(appType);
+	switchIndex(appType);
+	switchMapping(1);
 
-	mapping = index.mapping('comments');
-	
 	document = mapping.document(data.id);
 
 	document.set(data, function(){
@@ -267,8 +240,8 @@ QueryES.prototype.updateComment = function(commentID, comment, appType, callback
 QueryES.prototype.deleteComment = function(commentID, appType, callback){
 	var document;
 
-	checkType(appType);
-	mapping = index.mapping('comments');	
+	switchIndex(appType);
+	switchMapping(1);
 
 	document = mapping.document(commentID);
 	document.delete(function(){
