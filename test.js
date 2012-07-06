@@ -66,7 +66,7 @@ queryES.addQuestion(question, 0, function(){
 
 //@params: question model, type, callback
 /*
- queryES.addFollower('pJfzndwdadddQuOicWWAjx7F00', 'ddd', 0, function(){
+ queryES.addFollower('pJfzndwdadddQuOicWWAjx7F00', 'dddgg', 0, function(){
  console.log("Follower added, check ES");
  });
 */

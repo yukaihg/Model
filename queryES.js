@@ -117,7 +117,7 @@ QueryES.prototype.addFollower = function(questionID, followerID, appType, callba
 	var link = '/' + switchIndex(appType) + '/questions/' + questionID + '/_update';
 
 	var data = {
-		'script':'ctx._source.followup += followup',
+		'script':'ctx._source.followup.contains(followup) ? ctx.op = \"none\"; : ctx._source.followup += followup;',
 		'params':{
 			'followup':followerID
 		}
