@@ -112,15 +112,30 @@ QueryES.prototype.addQuestion = function(data, appType, callback){
 	});
 }
 
-
-//update question body
-QueryES.prototype.updateQuestion = function(questionID, questionBody, appType, callback){
+//Add a new follower
+QueryES.prototype.addFollower = function(questionID, followerID, appType, callback){
 	var link = '/' + switchIndex(appType) + '/questions/' + questionID + '/_update';
 
 	var data = {
-		'script':'ctx._source.body = body',
+		'script':'ctx._source.followup += followup',
 		'params':{
-			'body':questionBody
+			'followup':followerID
+		}
+	}
+
+	db.post(link, data, function(){
+		callback();
+	})
+}
+
+//update question title
+QueryES.prototype.updateQuestion = function(questionID, questionTitle, appType, callback){
+	var link = '/' + switchIndex(appType) + '/questions/' + questionID + '/_update';
+
+	var data = {
+		'script':'ctx._source.title = title',
+		'params':{
+			'title':questionTitle
 		}
 	}
 

@@ -49,7 +49,7 @@ var map = function(appType){
 						"format":"dateOptionalTime"
 					},
 					"followup": {
-						"type": "object"
+						"type": "string"
 					}
 				}
 			},
