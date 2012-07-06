@@ -99,11 +99,20 @@ queryES.getComment('aJfzggggguOicWWAjx7F05', 1, function(result){
 });
 */
 
+//*****************GET a comment by target_uuid***********************
+//@params: target_uuid, appType, callback
+
+queryES.getCommentByTarget_uuid('pJfznhheQuOicWWAjx7F00', 0, function(result){
+	console.log('Found: ' + result.total);
+	console.log(JSON.stringify(result.hits));
+});
+
+
 //*****************GET all comments by user uuid********
 
 //@params: userID, type, callback
 /*
-queryES.getAllCommentByUserID('zoro', 0, function(result){
+queryES.getAllCommentByUserID('mcs3', 1, function(result){
 	//You should get 2 sets of result
 	console.log('Found: ' + result.total);
 	console.log(JSON.stringify(result.hits));
@@ -162,5 +171,13 @@ queryES.deleteCommentID("","", function() {
 /*
 queryES.updateVote('zzz123', 1, 0, function() {
 	console.log("Comment vote updated");
+});
+*/
+
+//*****************Update comment's isAnswered***********************
+//@params: commentID, appType, callback
+/*
+queryES.updateIsAnswered('qJfznhheQuOicWWAjx7F05', 0, function() {
+	console.log("Comment isAnswered updated");
 });
 */

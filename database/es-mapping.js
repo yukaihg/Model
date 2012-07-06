@@ -81,7 +81,7 @@ var map = function(appType){
 					"user": {
 						"type": "string"
 					},	
-					"uuid": {
+					"target_uuid": {
 						"type" : "string"
 					},
 					"title": {

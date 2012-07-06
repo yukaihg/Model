@@ -190,6 +190,36 @@ QueryES.prototype.getComment = function(commentID, appType, callback){
 	});
 }
 
+//get a comment data based on target_uuid
+QueryES.prototype.getCommentByTarget_uuid = function(ptarget_uuid, appType, callback){
+	
+	var data = {
+		query: {
+			bool:{
+				must:[{
+					term:{
+						target_uuid: ptarget_uuid
+					}
+				}]
+			}
+		},
+		from: 0,
+		size: 20
+	};
+
+	switchIndex(appType);
+	switchMapping(1);
+
+	mapping.search(data, function(err, data){
+		if(data.hits.total !== 0){
+			callback(data.hits);
+		}
+		else{
+			console.log("Specified target_uuid does not contain any comments");
+		}
+	});
+}
+
 //get all comment data based on userID for now
 QueryES.prototype.getAllCommentByUserID = function(userID, appType, callback){
 	var data = {
@@ -214,7 +244,7 @@ QueryES.prototype.getAllCommentByUserID = function(userID, appType, callback){
 			callback(data.hits);
 		}
 		else{
-			callback(data);
+			// callback(data); not yet
 			console.log("User did not post any comments");
 		}
 	});
@@ -326,6 +356,25 @@ QueryES.prototype.updateVote = function(commentID, direction, appType, callback)
 	//increment the vote found at commentID
 	db.post(link, data, function(){
 		// increment
+		callback();
+	})
+}
+
+//update a comment isAnswered
+QueryES.prototype.updateIsAnswered = function(commentID, appType, callback){
+	var data;
+
+	var link = '/' + switchIndex(appType) + '/comments/' + commentID +'/_update';
+
+	data = {
+		'script':'ctx._source.isAnswered = status',
+		'params':{
+			'status':'true'
+		}
+	}
+
+	//set isAnswered to true for the comment found at commentID
+	db.post(link, data, function(){		
 		callback();
 	})
 }
